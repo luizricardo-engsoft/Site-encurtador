@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@seu.usuario — links</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #080808;
+    --surface: #111111;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.18);
+    --text: #f0f0f0;
+    --muted: #666;
+    --accent: #e8e8e8;
+  }
+
+  html, body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1.25rem 4rem;
+  }
+
+  /* grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* avatar */
+  .avatar {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    border: 1px solid var(--border-hover);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .avatar svg { width: 36px; height: 36px; opacity: 0.5; }
+
+  .name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+    animation: fadeUp 0.6s 0.05s ease both;
+    margin-bottom: 0.3rem;
+  }
+
+  .bio {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    animation: fadeUp 0.6s 0.1s ease both;
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+
+  /* section label */
+  .section-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #333;
+    margin-bottom: 0.75rem;
+    align-self: flex-start;
+    padding-left: 2px;
+  }
+
+  /* link button */
+  .links {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .link-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    width: 100%;
+    padding: 0.85rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .link-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.2s;
+  }
+
+  .link-btn:hover {
+    border-color: var(--border-hover);
+    background: #161616;
+    transform: translateY(-1px);
+  }
+
+  .link-btn:active { transform: translateY(0px) scale(0.99); }
+
+  .link-btn .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .link-btn .icon svg { width: 16px; height: 16px; }
+
+  .link-btn .label { flex: 1; }
+
+  .link-btn .arrow {
+    font-size: 0.75rem;
+    color: #333;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .link-btn:hover .arrow { color: #666; transform: translateX(2px); }
+
+  /* icon bg colors */
+  .ic-insta { background: #1a0f13; }
+  .ic-github { background: #0f0f12; }
+  .ic-discord { background: #0d0f1a; }
+  .ic-email { background: #0d130f; }
+  .ic-pinterest { background: #1a0a0a; }
+  .ic-youtube { background: #1a0c0c; }
+  .ic-spotify { background: #091309; }
+
+  /* icon accent colors */
+  .ic-insta svg { color: #c45b8a; }
+  .ic-github svg { color: #aaa; }
+  .ic-discord svg { color: #7289da; }
+  .ic-email svg { color: #4a9f6f; }
+  .ic-pinterest svg { color: #e60023; }
+  .ic-youtube svg { color: #ff4444; }
+  .ic-spotify svg { color: #1db954; }
+
+  /* staggered animation */
+  .link-btn { animation: fadeUp 0.5s ease both; }
+  .link-btn:nth-child(1) { animation-delay: 0.15s; }
+  .link-btn:nth-child(2) { animation-delay: 0.20s; }
+  .link-btn:nth-child(3) { animation-delay: 0.25s; }
+  .link-btn:nth-child(4) { animation-delay: 0.30s; }
+  .link-btn:nth-child(5) { animation-delay: 0.35s; }
+  .link-btn:nth-child(6) { animation-delay: 0.40s; }
+  .link-btn:nth-child(7) { animation-delay: 0.45s; }
+
+  .footer {
+    font-size: 0.62rem;
+    color: #2a2a2a;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+    animation: fadeUp 0.5s 0.55s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 480px) {
+    html, body { padding: 2rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="avatar">
+    <!-- substitua por <img src="foto.jpg" alt="avatar" style="width:100%;height:100%;object-fit:cover"> -->
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+      <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+    </svg>
+  </div>
+
+  <div class="name">@seu.usuario</div>
+  <div class="bio">dev · criativo · em construção</div>
+
+  <div class="section-label">redes sociais</div>
+  <div class="links" id="social">
+
+    <a class="link-btn" href="https://instagram.com/seu.usuario" target="_blank">
+      <span class="icon ic-insta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <circle cx="12" cy="12" r="5"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </span>
+      <span class="label">Instagram</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="link-btn" href="https://pinterest.com/seu.usuario" target="_blank">
+      <span class="icon ic-pinterest">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.598-.299-1.482c0-1.388.806-2.428 1.808-2.428.853 0 1.268.64 1.268 1.408 0 .858-.546 2.14-.828 3.33-.236.995.499 1.806 1.476 1.806 1.772 0 3.135-1.866 3.135-4.561 0-2.387-1.715-4.055-4.163-4.055-2.837 0-4.5 2.127-4.5 4.326 0 .856.33 1.773.742 2.274a.3.3 0 0 1 .069.283c-.076.314-.244.995-.277 1.134-.044.183-.146.222-.337.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.966-.527-2.292-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.523 0 10-4.477 10-10S17.523 2 12 2z"/>
+        </svg>
+      </span>
+      <span class="label">Pinterest</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="link-btn" href="https://youtube.com/@seu.usuario" target="_blank">
+      <span class="icon ic-youtube">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+          <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#1a0c0c"/>
+        </svg>
+      </span>
+      <span class="label">YouTube</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="link-btn" href="https://open.spotify.com/user/seu.usuario" target="_blank">
+      <span class="icon ic-spotify">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm4.578 14.437a.625.625 0 0 1-.86.208c-2.352-1.438-5.313-1.763-8.802-.965a.624.624 0 1 1-.278-1.216c3.818-.873 7.094-.497 9.732 1.113a.624.624 0 0 1 .208.86zm1.222-2.719a.781.781 0 0 1-1.075.258C14.1 12.342 10.64 11.86 7.35 12.782a.782.782 0 0 1-.452-1.496c3.7-1.12 7.604-.578 10.647 1.357a.782.782 0 0 1 .255 1.075zm.105-2.83a.937.937 0 0 1-1.288.313C13.874 9.574 9.51 9.426 6.24 10.418a.937.937 0 0 1-.544-1.79c3.673-1.117 8.477-.9 11.92 1.172a.937.937 0 0 1 .289 1.288z"/>
+        </svg>
+      </span>
+      <span class="label">Spotify</span>
+      <span class="arrow">→</span>
+    </a>
+
+  </div>
+
+  <div class="section-label">contato & dev</div>
+  <div class="links" id="dev">
+
+    <a class="link-btn" href="https://github.com/seu-usuario" target="_blank">
+      <span class="icon ic-github">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+      </span>
+      <span class="label">GitHub</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="link-btn" href="https://discord.gg/seu-servidor" target="_blank">
+      <span class="icon ic-discord">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026c.462-.62.874-1.275 1.226-1.963.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z"/>
+        </svg>
+      </span>
+      <span class="label">Discord</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="link-btn" href="mailto:seu@email.com">
+      <span class="icon ic-email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <rect x="2" y="4" width="20" height="16" rx="3"/>
+          <path d="M2 8l10 6 10-6"/>
+        </svg>
+      </span>
+      <span class="label">Email</span>
+      <span class="arrow">→</span>
+    </a>
+
+  </div>
+
+  <div class="footer">feito por mim · © 2025</div>
+
+</div>
+</body>
+</html>
